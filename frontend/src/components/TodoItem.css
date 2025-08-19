@@ -1,0 +1,46 @@
+.TodoItem {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.TodoItem.isCompleted{
+    background-color: #eee;
+}
+
+.TodoItem.isCompleted .content{
+    text-decoration: line-through;
+    color: gray;
+}
+
+.TodoItem .content {
+    flex: 1;
+}
+
+.TodoItem .date {
+    font-size: 14px;
+    color: gray;
+}
+
+.btn-wrap {
+    display: flex;
+    gap: 10px;
+}
+
+.TodoItem button {
+    cursor: pointer;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    padding: 5px;
+    color: #fff;
+}
+
+.updateBtn {
+    background-color: springgreen;
+}
+
+.deleteBtn {
+    background-color: red;
+}
