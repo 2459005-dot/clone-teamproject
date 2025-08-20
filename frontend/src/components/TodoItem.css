@@ -1,17 +1,30 @@
+.edit-wrap,
+.content-wrap {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+}
+
 .TodoItem {
     display: flex;
     gap: 20px;
-    padding: 10px 0;
+    padding: 10px;
     border-bottom: 1px solid #eee;
 }
 
-.TodoItem.isCompleted{
+.TodoItem.isCompleted {
     background-color: #eee;
 }
 
-.TodoItem.isCompleted .content{
+.TodoItem.isCompleted .content {
     text-decoration: line-through;
     color: gray;
+}
+
+.edit-wrap input {
+    flex: 1;
+    border: 1px solid #f1f1f1;
+    border-radius: 5px;
 }
 
 .TodoItem .content {
