@@ -48,6 +48,7 @@ const TodoItem = ({ todo, onUpdateChecked, onUpdateText, onDelete }) => {
           placeholder='수정할 내용 입력' />
 
         <div className="date">{new Date(`${todo.date}`).toLocaleDateString()}</div>
+        <div className="category">[{todo.category}]</div> 
         <div className="btn-wrap">
           <button className="updateBtn" onClick={saveEdit}>저장하기</button>
           <button className="deleteBtn"
@@ -59,6 +60,7 @@ const TodoItem = ({ todo, onUpdateChecked, onUpdateText, onDelete }) => {
         <div className="content-wrap">
           <div className='content'>{todo.text}</div>
           <div className='date'>{new Date(`${todo.date}`).toLocaleDateString()}</div>
+          <div className="category">[{todo.category}]</div> 
           <div className="btn-wrap">
             <button
               className='updateBtn'

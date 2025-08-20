@@ -57,3 +57,13 @@
 .deleteBtn {
     background-color: red;
 }
+
+.category {
+    font-size: 0.85rem;
+    color: #666;
+    margin-left: 8px;
+}
+
+.isCompleted .category {
+    color: #aaa;
+}
