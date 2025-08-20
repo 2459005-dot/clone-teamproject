@@ -26,18 +26,14 @@ function App() {
     fetchTodos()
   }, [])
 
-  const onCreate = async (todoText) => {
-    if (!todoText.trim()) return
+  const onCreate = async ({ text, category }) => {
+    if (!text.trim()) return
     try {
-      const res = await axios.post(API, { text: todoText.trim() })
+      const res = await axios.post(API, { text: text.trim(), category })
 
-      const created = res.data?.todo ?? res.data
+      const created = res.data?.bucket ?? res.data
 
-      if (Array.isArray(res.data?.todos)) {
-        setTodos(res.data.todos)
-      } else {
-        setTodos(prev => [created, ...prev])
-      }
+      setBuckets(prev => [created, ...prev])
     } catch (error) {
       console.error('추가 실패', error)
     }
@@ -85,31 +81,23 @@ function App() {
     }
   }
 
-  const onUpdateText = async (id, next) => {
-    const value = next?.trim()
+  const onUpdateBucket = async (id, { text, category }) => {
 
-    if(!value) return
+    const nextText = text?.trim();
+
+    if (!nextText) return;
 
     try {
-      const { data } = await axios.patch(`${API}/${id}/text`,
-        {
-          text: value
-        }
-      )
+      const res = await axios.put(`/api/buckets/${id}`, { text: nextText, category });
 
-      if (Array.isArray(data?.todos)) {
-        setTodos(data.todos)
-      } else {
-        const updated = data?.todo ?? data;
-        setTodos(
-          prev => prev.map(t => (t._id === updated._id ? updated : t))
-        )
-      }
+      const updated = res.data.bucket ?? res.data;
 
-    } catch (error) {
-      console.error('업데이트 실패', error)
+      setBuckets(prev => prev.map(b => (b._id === updated._id ? updated : b)));
+
+    } catch (err) {
+      console.error('업데이트 실패', err);
     }
-  }
+  };
 
   return (
     <div className='App'>
@@ -119,7 +107,7 @@ function App() {
       <TodoList
         todos={Array.isArray(todos) ? todos : []}
         onUpdateChecked={onUpdateChecked}
-        onUpdateText={onUpdateText}
+        onUpdateBucket={onUpdateBucket}
         onDelete={onDelete} />
     </div>
   )

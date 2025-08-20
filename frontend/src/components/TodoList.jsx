@@ -1,17 +1,14 @@
-import React from 'react'
-import './TodoList.css'
+import React, { useState, useMemo } from 'react'
 import TodoItem from './TodoItem'
-import { useState } from 'react'
-import { useMemo } from 'react'
+import './TodoList.css'
 
-const TodoList = ({ todos, onUpdateChecked, onUpdateText, onDelete }) => {
-
+const TodoList = ({ todos = [], onUpdateChecked, onUpdateBucket, onDelete }) => {
   const [q, setQ] = useState('')
 
   const filtered = useMemo(() => {
     const kw = q.trim().toLowerCase()
-    if (!kw) return todos;
-    return todos.filter((t)=>(t.text??"").toLowerCase().includes(kw))
+    if (!kw) return todos
+    return todos.filter((t) => (t.text ?? "").toLowerCase().includes(kw))
   }, [todos, q])
 
   return (
@@ -21,17 +18,22 @@ const TodoList = ({ todos, onUpdateChecked, onUpdateText, onDelete }) => {
         type="text"
         value={q}
         onChange={(e) => setQ(e.target.value)}
-        placeholder='검색어를 입력하세요' />
+        placeholder='검색어를 입력하세요'
+      />
       <div className='todos-wrapper'>
-        {filtered.map((todo, i) => (
-          <TodoItem
-            key={i}
-            todo={todo}
-            onUpdateChecked={onUpdateChecked}
-            onUpdateText={onUpdateText}
-            onDelete={onDelete}
-          />
-        ))}
+        {filtered.length ? (
+          filtered.map((todo) => (
+            <TodoItem
+              key={todo._id}
+              todo={todo}
+              onUpdateChecked={onUpdateChecked}
+              onUpdateBucket={onUpdateBucket}
+              onDelete={onDelete}
+            />
+          ))
+        ) : (
+          <div>등록된 버킷이 없습니다.</div>
+        )}
       </div>
     </div>
   )

@@ -1,16 +1,20 @@
 import React, { useState } from 'react'
 import './TodoEditor.css'
 
+const categories = ["여행", "독서", "운동", "기타"]
+
 const TodoEditor = ({ onCreate }) => {
   const [text, setText] = useState("")
+  const [category, setCategory] = useState(categories[0])
+
   const onSubmit = (e) => {
     e.preventDefault()
-
     if (!text.trim()) return
-
-    onCreate(text.trim())
+    onCreate({ text: text.trim(), category })
     setText("")
+    setCategory(categories[0])
   }
+
   return (
     <form className='TodoEditor' onSubmit={onSubmit}>
       <input
@@ -19,6 +23,14 @@ const TodoEditor = ({ onCreate }) => {
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
+      <select
+        value={category}
+        onChange={(e) => setCategory(e.target.value)}
+      >
+        {categories.map(c => (
+          <option key={c} value={c}>{c}</option>
+        ))}
+      </select>
       <button type='submit' disabled={!text.trim()}>추가</button>
     </form>
   )

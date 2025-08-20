@@ -111,62 +111,78 @@ router.patch('/:id/check', async (req, res) => {
     }
 })
 
-router.patch('/:id/text', async (req, res) => {
-    try {
-        const { id } = req.params
-        if (!ensureObjectId(id, res)) return
+// router.patch('/:id/text', async (req, res) => {
+//     try {
+//         const { id } = req.params
+//         if (!ensureObjectId(id, res)) return
 
-        const { text } = req.body
-        if (!text || !text.trim()) {
-            return res.status(400).json({ message: 'text는 필수' })
-        }
+//         const { text } = req.body
+//         if (!text || !text.trim()) {
+//             return res.status(400).json({ message: 'text는 필수' })
+//         }
 
-        const updated = await Bucket.findByIdAndUpdate(id, { text: text.trim() }, {
-            new: true,
-            runValidators: true,
-            context: 'query'
-        })
+//         const updated = await Bucket.findByIdAndUpdate(id, { text: text.trim() }, {
+//             new: true,
+//             runValidators: true,
+//             context: 'query'
+//         })
 
-        if (!updated) {
-            return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
-        }
-        res.status(200).json({ message: "수정 성공", bucket: updated })
-    } catch (error) {
-        res.status(400).json({ error: "수정 실패" })
-    }
+//         if (!updated) {
+//             return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
+//         }
+//         res.status(200).json({ message: "수정 성공", bucket: updated })
+//     } catch (error) {
+//         res.status(400).json({ error: "수정 실패" })
+//     }
+// })
+
+// router.patch('/:id/category', async (req, res) => {
+//     try {
+//         const { id } = req.params
+//         if (!ensureObjectId(id, res)) return
+
+//         const { category } = req.body
+//         const allowedCategories = ["여행", "독서", "운동", "기타"]
+
+//         if (!category || !allowedCategories.includes(category)) {
+//             return res.status(400).json({
+//                 message: `category는 반드시 ${allowedCategories.join(", ")} 중 하나여야 합니다.`
+//             })
+//         }
+
+//         const updated = await Bucket.findByIdAndUpdate(
+//             id,
+//             { category },
+//             {
+//                 new: true,
+//                 runValidators: true,
+//                 context: 'query'
+//             }
+//         )
+
+//         if (!updated) {
+//             return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
+//         }
+//         res.status(200).json({ message: "수정 성공", bucket: updated })
+//     } catch (error) {
+//         res.status(400).json({ error: "수정 실패" })
+//     }
+// })
+
+router.patch('/:id', async (req, res) => {
+    const { text, category } = req.body
+    const updateData = {}
+    if (text) updateData.text = text
+    if (category) updateData.category = category
+
+    const updated = await Bucket.findByIdAndUpdate(req.params.id, updateData, {
+        new: true,
+        runValidators: true
+    })
+
+    if (!updated) return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
+    res.status(200).json({ bucket: updated })
 })
 
-router.patch('/:id/category', async (req, res) => {
-    try {
-        const { id } = req.params
-        if (!ensureObjectId(id, res)) return
-
-        const { category } = req.body
-        const allowedCategories = ["여행", "독서", "운동", "기타"]
-
-        if (!category || !allowedCategories.includes(category)) {
-            return res.status(400).json({
-                message: `category는 반드시 ${allowedCategories.join(", ")} 중 하나여야 합니다.`
-            })
-        }
-
-        const updated = await Bucket.findByIdAndUpdate(
-            id,
-            { category },
-            {
-                new: true,
-                runValidators: true,
-                context: 'query'
-            }
-        )
-
-        if (!updated) {
-            return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
-        }
-        res.status(200).json({ message: "수정 성공", bucket: updated })
-    } catch (error) {
-        res.status(400).json({ error: "수정 실패" })
-    }
-})
 
 module.exports = router
