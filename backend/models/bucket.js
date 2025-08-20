@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
-const todoSchema = new mongoose.Schema(
+
+const bucketSchema = new mongoose.Schema(
     {
         text: {
             type: String,
@@ -25,6 +26,6 @@ const todoSchema = new mongoose.Schema(
     }
 )
 
-const Todo = mongoose.model("Bucket", todoSchema)
+const Bucket = mongoose.model("Bucket", bucketSchema)
 
-module.exports = Todo
+module.exports = Bucket

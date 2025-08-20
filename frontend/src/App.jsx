@@ -9,7 +9,7 @@ import TodoList from './components/TodoList'
 function App() {
 
   const [todos, setTodos] = useState([])
-  const API = `${import.meta.env.VITE_API_URL}/api/todos`
+  const API = `${import.meta.env.VITE_API_URL}/api/buckets`
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -19,7 +19,6 @@ function App() {
           res.data : res.data.todos ?? []
 
         setTodos(data)
-        // console.log(data)
       } catch (error) {
         console.log('가져오기 실패', error)
       }
@@ -58,7 +57,7 @@ function App() {
 
       const deletedId = data?.deletedId ?? data?.todo?._id ?? data?._id ?? id
       setTodos((prev) => prev.filter((t) => t._id !== deletedId))
-      
+
     } catch (error) {
       console.error("삭제 실패", error)
     }
