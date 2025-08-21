@@ -8,22 +8,23 @@ import TodoList from './components/TodoList'
 
 function App() {
 
-  const [todos, setTodos] = useState([])
+  const [buckets, setBuckets] = useState([])
   const API = `${import.meta.env.VITE_API_URL}/api/buckets`
 
   useEffect(() => {
-    const fetchTodos = async () => {
+    const fetchBuckets = async () => {
       try {
         const res = await axios.get(API)
-        const data = Array.isArray(res.data) ?
-          res.data : res.data.todos ?? []
+        const data = Array.isArray(res.data)
+          ? res.data
+          : res.data.buckets ?? []
 
-        setTodos(data)
+        setBuckets(data)
       } catch (error) {
         console.log('가져오기 실패', error)
       }
     }
-    fetchTodos()
+    fetchBuckets()
   }, [])
 
   const onCreate = async ({ text, category }) => {
@@ -46,13 +47,13 @@ function App() {
       const { data } = await axios.delete(`${API}/${id}`)
 
       console.log(data)
-      if (Array.isArray(data?.todos)) {
-        setTodos(data.todos)
+      if (Array.isArray(data?.buckets)) {
+        setBuckets(data.buckets)
         return
       }
 
-      const deletedId = data?.deletedId ?? data?.todo?._id ?? data?._id ?? id
-      setTodos((prev) => prev.filter((t) => t._id !== deletedId))
+      const deletedId = data?.deletedId ?? data?.bucket?._id ?? data?._id ?? id
+      setBuckets((prev) => prev.filter((b) => b._id !== deletedId))
 
     } catch (error) {
       console.error("삭제 실패", error)
@@ -62,17 +63,15 @@ function App() {
   const onUpdateChecked = async (id, next) => {
     try {
       const { data } = await axios.patch(`${API}/${id}/check`,
-        {
-          isCompleted: next
-        }
+        { isCompleted: next }
       )
 
-      if (Array.isArray(data?.todos)) {
-        setTodos(data.todos)
+      if (Array.isArray(data?.buckets)) {
+        setBuckets(data.buckets)
       } else {
-        const updated = data?.todo ?? data;
-        setTodos(
-          prev => prev.map(t => (t._id === updated._id ? updated : t))
+        const updated = data?.bucket ?? data
+        setBuckets(prev =>
+          prev.map(b => (b._id === updated._id ? updated : b))
         )
       }
 
@@ -82,33 +81,35 @@ function App() {
   }
 
   const onUpdateBucket = async (id, { text, category }) => {
-
-    const nextText = text?.trim();
-
-    if (!nextText) return;
+    const nextText = text?.trim()
+    if (!nextText) return
 
     try {
-      const res = await axios.put(`/api/buckets/${id}`, { text: nextText, category });
+      const res = await axios.put(`${API}/${id}`, { text: nextText, category })
 
-      const updated = res.data.bucket ?? res.data;
+      const updated = res.data.bucket ?? res.data
 
-      setBuckets(prev => prev.map(b => (b._id === updated._id ? updated : b)));
+      setBuckets(prev =>
+        prev.map(b => (b._id === updated._id ? updated : b))
+      )
 
+      return updated
+      
     } catch (err) {
-      console.error('업데이트 실패', err);
+      console.error('업데이트 실패', err)
     }
-  };
+  }
 
   return (
     <div className='App'>
       <Header />
-      <TodoEditor
-        onCreate={onCreate} />
+      <TodoEditor onCreate={onCreate} />
       <TodoList
-        todos={Array.isArray(todos) ? todos : []}
+        buckets={buckets}
         onUpdateChecked={onUpdateChecked}
         onUpdateBucket={onUpdateBucket}
-        onDelete={onDelete} />
+        onDelete={onDelete}
+      />
     </div>
   )
 }

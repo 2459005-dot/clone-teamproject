@@ -2,14 +2,14 @@ import React, { useState, useMemo } from 'react'
 import TodoItem from './TodoItem'
 import './TodoList.css'
 
-const TodoList = ({ todos = [], onUpdateChecked, onUpdateBucket, onDelete }) => {
+const TodoList = ({ buckets = [], onUpdateChecked, onUpdateBucket, onDelete }) => {
   const [q, setQ] = useState('')
 
   const filtered = useMemo(() => {
     const kw = q.trim().toLowerCase()
-    if (!kw) return todos
-    return todos.filter((t) => (t.text ?? "").toLowerCase().includes(kw))
-  }, [todos, q])
+    if (!kw) return buckets
+    return buckets.filter((b) => (b.text ?? "").toLowerCase().includes(kw))
+  }, [buckets, q])
 
   return (
     <div className='TodoList'>
@@ -22,10 +22,10 @@ const TodoList = ({ todos = [], onUpdateChecked, onUpdateBucket, onDelete }) => 
       />
       <div className='todos-wrapper'>
         {filtered.length ? (
-          filtered.map((todo) => (
+          filtered.map((bucket) => (
             <TodoItem
-              key={todo._id}
-              todo={todo}
+              key={bucket._id}
+              bucket={bucket}
               onUpdateChecked={onUpdateChecked}
               onUpdateBucket={onUpdateBucket}
               onDelete={onDelete}

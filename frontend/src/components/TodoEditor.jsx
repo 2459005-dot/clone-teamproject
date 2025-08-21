@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import './TodoEditor.css'
+import './TodoEditor.css'   // CSS 파일은 그대로 두실지, `BucketEditor.css`로 바꾸실지는 선택이에요
 
 const categories = ["여행", "독서", "운동", "기타"]
 
-const TodoEditor = ({ onCreate }) => {
+const BucketEditor = ({ onCreate }) => {
   const [text, setText] = useState("")
   const [category, setCategory] = useState(categories[0])
 
@@ -16,7 +16,7 @@ const TodoEditor = ({ onCreate }) => {
   }
 
   return (
-    <form className='TodoEditor' onSubmit={onSubmit}>
+    <form className='BucketEditor' onSubmit={onSubmit}>
       <input
         type="text"
         placeholder='새로운 버킷리스트'
@@ -36,4 +36,4 @@ const TodoEditor = ({ onCreate }) => {
   )
 }
 
-export default TodoEditor
+export default BucketEditor

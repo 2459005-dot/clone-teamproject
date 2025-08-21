@@ -172,7 +172,8 @@ router.patch('/:id/check', async (req, res) => {
 router.patch('/:id', async (req, res) => {
     const { text, category } = req.body
     const updateData = {}
-    if (text) updateData.text = text
+
+    if (typeof text === 'string') updateData.text = text.trim()
     if (category) updateData.category = category
 
     const updated = await Bucket.findByIdAndUpdate(req.params.id, updateData, {
@@ -183,6 +184,7 @@ router.patch('/:id', async (req, res) => {
     if (!updated) return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
     res.status(200).json({ bucket: updated })
 })
+
 
 
 module.exports = router
