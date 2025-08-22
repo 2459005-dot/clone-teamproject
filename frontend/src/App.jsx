@@ -86,7 +86,6 @@ function App() {
 
     try {
       const res = await axios.put(`${API}/${id}`, { text: nextText, category })
-      console.log("PUT 응답", res.data)
 
       const updated = res.data.updated ?? res.data.bucket ?? res.data
 
