@@ -86,15 +86,16 @@ function App() {
 
     try {
       const res = await axios.put(`${API}/${id}`, { text: nextText, category })
+      console.log("PUT 응답", res.data)
 
-      const updated = res.data.bucket ?? res.data
+      const updated = res.data.updated ?? res.data.bucket ?? res.data
 
       setBuckets(prev =>
         prev.map(b => (b._id === updated._id ? updated : b))
       )
 
       return updated
-      
+
     } catch (err) {
       console.error('업데이트 실패', err)
     }
