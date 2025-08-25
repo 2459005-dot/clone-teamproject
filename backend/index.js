@@ -2,12 +2,14 @@ const express = require("express")
 const mongoose = require("mongoose")
 const dotenv = require("dotenv")
 const cors = require("cors")
+const cookieParser = require("cookie-parser");
 
 dotenv.config()
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
+app.use(cookieParser());
 app.use(express.json())
 app.use(cors({
     origin: process.env.FRONT_ORIGIN,
