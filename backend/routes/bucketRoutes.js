@@ -185,6 +185,4 @@ router.patch('/:id', async (req, res) => {
     res.status(200).json({ bucket: updated })
 })
 
-
-
 module.exports = router

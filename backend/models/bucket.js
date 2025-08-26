@@ -19,6 +19,10 @@ const bucketSchema = new mongoose.Schema(
             type: String,
             enum: ["여행", "독서", "운동", "기타"],
             default: "기타"
+        },
+        dueDate: {
+            type: Date,
+            default: Date.now
         }
     },
     {

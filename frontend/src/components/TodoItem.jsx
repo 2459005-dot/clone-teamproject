@@ -10,6 +10,7 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
   const [editing, setEditing] = useState(false)
   const [text, setText] = useState(bucket?.text || "")
   const [selectedCategory, setSelectedCategory] = useState(bucket?.category || "기타")
+  const [dueDate, setDueDate] = useState(bucket?.dueDate || "")
 
   // ✅ bucket이 변경될 때 로컬 state도 동기화
   useEffect(() => {
@@ -36,6 +37,16 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') saveEdit()
     if (e.key === 'Escape') cancleEdit()
+  }
+
+  const getDDay = (targetDate) => {
+    if (!targetDate) return null
+    const today = new Date()
+    const dday = new Date(targetDate)
+    const diff = Math.ceil((dday - today) / (1000 * 60 * 60 * 24))
+    if (diff > 0) return `D-${diff}`
+    if (diff === 0) return "D-Day!"
+    return `D+${Math.abs(diff)}`
   }
 
   return (
@@ -66,8 +77,15 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
             ))}
           </select>
 
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+          />
+
           <div className="date">{new Date(bucket.date).toLocaleDateString()}</div>
           <div className="category">[{selectedCategory}]</div>
+          <div className="dday">{getDDay(dueDate)}</div>
 
           <div className="btn-wrap">
             <button className="updateBtn" onClick={saveEdit}>저장하기</button>
@@ -77,6 +95,7 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
       ) : (
         <div className="content-wrap">
           <div className='content'>{bucket.text}</div>
+          {bucket.dueDate && <div className="dday">{getDDay(bucket.dueDate)}</div>}
           <div className='date'>{new Date(bucket.date).toLocaleDateString()}</div>
           <div className="category">[{bucket.category}]</div>
 
