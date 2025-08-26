@@ -1,19 +1,61 @@
-.TodoEditor{
+.BucketEditor {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
-.TodoEditor input{
+.BucketEditor input {
     flex: 1;
-    padding: 15px;
-    border: 1px solid #000;
-    border-radius: 5px;
+    padding: 12px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.2s ease;
 }
 
-.TodoEditor button{
+.BucketEditor input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+    outline: none;
+}
+
+.BucketEditor select {
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    font-size: 15px;
     cursor: pointer;
-    border: 1px solid #000;
-    border-radius: 5px;
-    background-color: rgb(37, 147, 255);
-    width: 80px;
+    transition: border-color 0.2s;
+}
+
+.BucketEditor select:hover {
+    border-color: #2563eb;
+}
+
+.BucketEditor button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background-color: #2563eb;
+    color: white;
+    font-weight: 600;
+    padding: 12px 20px;
+    font-size: 15px;
+    transition: background-color 0.25s, transform 0.15s;
+}
+
+.BucketEditor button:hover:not(:disabled) {
+    background-color: #1e40af;
+    transform: translateY(-1px);
+}
+
+.BucketEditor button:disabled {
+    background-color: #9ca3af;
+    cursor: not-allowed;
 }
