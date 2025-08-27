@@ -27,10 +27,11 @@ function App() {
     fetchBuckets()
   }, [])
 
-  const onCreate = async ({ text, category }) => {
+  const onCreate = async ({ text, category, dueDate }) => {
+    console.log("📦 새로 생성 요청:", { text, category, dueDate })
     if (!text.trim()) return
     try {
-      const res = await axios.post(API, { text: text.trim(), category })
+      const res = await axios.post(API, { text: text.trim(), category, dueDate })
 
       const created = res.data?.bucket ?? res.data
 
@@ -80,12 +81,12 @@ function App() {
     }
   }
 
-  const onUpdateBucket = async (id, { text, category }) => {
+  const onUpdateBucket = async (id, { text, category, dueDate }) => {
     const nextText = text?.trim()
     if (!nextText) return
 
     try {
-      const res = await axios.put(`${API}/${id}`, { text: nextText, category })
+      const res = await axios.put(`${API}/${id}`, { text: nextText, category, dueDate })
 
       const updated = res.data.updated ?? res.data.bucket ?? res.data
 

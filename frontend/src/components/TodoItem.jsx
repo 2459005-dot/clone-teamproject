@@ -10,7 +10,7 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
   const [editing, setEditing] = useState(false)
   const [text, setText] = useState(bucket?.text || "")
   const [selectedCategory, setSelectedCategory] = useState(bucket?.category || "기타")
-  const [dueDate, setDueDate] = useState(bucket?.dueDate || "")
+  const [dueDate, setDueDate] = useState(bucket?.dueDate ? bucket.dueDate.split("T")[0] : "")
 
   // ✅ bucket이 변경될 때 로컬 state도 동기화
   useEffect(() => {
@@ -30,7 +30,11 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
     const nextText = text.trim()
     if (!nextText) return setEditing(false)
 
-    await onUpdateBucket(bucket._id, { text: nextText, category: selectedCategory })
+    await onUpdateBucket(bucket._id, {
+      text: nextText,
+      category: selectedCategory,
+      dueDate: dueDate ? new Date(dueDate).toISOString() : null
+    })
     setEditing(false)
   }
 
@@ -48,6 +52,22 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
     if (diff === 0) return "D-Day!"
     return `D+${Math.abs(diff)}`
   }
+
+  const getDDayLabel = (dueDate) => {
+    if (!dueDate) return "";
+
+    const today = new Date();
+    const target = new Date(dueDate);
+
+    today.setHours(0, 0, 0, 0);
+    target.setHours(0, 0, 0, 0);
+
+    const diff = Math.floor((target - today) / (1000 * 60 * 60 * 24));
+
+    if (diff === 0) return "D-Day";
+    if (diff > 0) return `D-${diff}`;
+    return `D+${Math.abs(diff)}`;
+  };
 
   return (
     <div className={`TodoItem ${isCompleted ? 'isCompleted' : ''}`}>
@@ -85,7 +105,18 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
 
           <div className="date">{new Date(bucket.date).toLocaleDateString()}</div>
           <div className="category">[{selectedCategory}]</div>
-          <div className="dday">{getDDay(dueDate)}</div>
+          <div className="dday">
+            {dueDate && (
+              <span
+                className={`dday ${getDDay(dueDate)?.includes("D-") ? "future" :
+                  getDDay(dueDate) === "D-Day!" ? "today" :
+                    "past"
+                  }`}
+              >
+                {getDDay(dueDate)}
+              </span>
+            )}
+          </div>
 
           <div className="btn-wrap">
             <button className="updateBtn" onClick={saveEdit}>저장하기</button>
@@ -96,7 +127,7 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
         <div className="content-wrap">
           <div className='content'>{bucket.text}</div>
           {bucket.dueDate && <div className="dday">{getDDay(bucket.dueDate)}</div>}
-          <div className='date'>{new Date(bucket.date).toLocaleDateString()}</div>
+          <div className='date'>{getDDayLabel(bucket.dueDate)}</div>
           <div className="category">[{bucket.category}]</div>
 
           <div className="btn-wrap">

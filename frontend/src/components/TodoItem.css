@@ -3,6 +3,7 @@
     display: flex;
     width: 100%;
     gap: 20px;
+    align-items: center; /* ✅ D-day랑 입력창 정렬 */
 }
 
 .TodoItem {
@@ -10,6 +11,7 @@
     gap: 20px;
     padding: 10px;
     border-bottom: 1px solid #eee;
+    align-items: center; /* ✅ 체크박스/내용/D-day 정렬 */
 }
 
 .TodoItem.isCompleted {
@@ -21,10 +23,18 @@
     color: gray;
 }
 
-.edit-wrap input {
+.edit-wrap input[type="text"] {
     flex: 1;
     border: 1px solid #f1f1f1;
     border-radius: 5px;
+    padding: 5px;
+}
+
+.edit-wrap input[type="date"] {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 0.9rem;
 }
 
 .TodoItem .content {
@@ -46,7 +56,7 @@
     font-size: 14px;
     border: none;
     border-radius: 5px;
-    padding: 5px;
+    padding: 5px 10px;
     color: #fff;
 }
 
@@ -66,4 +76,32 @@
 
 .isCompleted .category {
     color: #aaa;
+}
+
+/* ✅ D-day 스타일 */
+.dday {
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin-left: 10px;
+}
+
+/* 남은 날수가 많으면 → 파랑 */
+.dday.future {
+    color: steelblue;
+}
+
+/* 오늘이 D-day → 초록 */
+.dday.today {
+    color: green;
+}
+
+/* 이미 지난 경우 → 빨강 */
+.dday.past {
+    color: crimson;
+}
+
+/* 완료된 항목의 D-day는 흐리게 */
+.TodoItem.isCompleted .dday {
+    color: #aaa;
+    font-weight: normal;
 }

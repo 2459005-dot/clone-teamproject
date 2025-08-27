@@ -11,7 +11,11 @@ const BucketEditor = ({ onCreate }) => {
   const onSubmit = (e) => {
     e.preventDefault()
     if (!text.trim()) return
-    onCreate({ text: text.trim(), category, dueDate })
+    onCreate({
+      text: text.trim(),
+      category,
+      dueDate: dueDate ? new Date(dueDate).toISOString() : null
+    })
     setText("")
     setCategory(categories[0])
   }

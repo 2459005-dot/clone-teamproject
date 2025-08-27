@@ -22,7 +22,7 @@ const bucketSchema = new mongoose.Schema(
         },
         dueDate: {
             type: Date,
-            default: Date.now
+            required:false
         }
     },
     {

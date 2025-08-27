@@ -18,6 +18,13 @@
     transition: all 0.2s ease;
 }
 
+.BucketEditor input[type="date"] {
+    flex: none;
+    width: 150px;
+    padding: 10px;
+    font-size: 15px;
+}
+
 .BucketEditor input:focus {
     border-color: #2563eb;
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
