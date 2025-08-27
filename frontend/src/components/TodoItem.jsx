@@ -109,9 +109,7 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
             {dueDate && (
               <span
                 className={`dday ${getDDay(dueDate)?.includes("D-") ? "future" :
-                  getDDay(dueDate) === "D-Day!" ? "today" :
-                    "past"
-                  }`}
+                  getDDay(dueDate) === "D-Day!" ? "today" : "past"}`}
               >
                 {getDDay(dueDate)}
               </span>
@@ -125,9 +123,9 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
         </div>
       ) : (
         <div className="content-wrap">
-          <div className='content'>{bucket.text}</div>
           {bucket.dueDate && <div className="dday">{getDDay(bucket.dueDate)}</div>}
-          <div className='date'>{getDDayLabel(bucket.dueDate)}</div>
+          <div className='content'>{bucket.text}</div>
+          <div className='date'>등록일자 : {new Date(bucket.date).toLocaleDateString()}</div>
           <div className="category">[{bucket.category}]</div>
 
           <div className="btn-wrap">

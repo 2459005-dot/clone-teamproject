@@ -5,11 +5,11 @@ import Header from './components/Header'
 import TodoEditor from './components/TodoEditor'
 import TodoList from './components/TodoList'
 
-
 function App() {
 
   const [buckets, setBuckets] = useState([])
   const API = `${import.meta.env.VITE_API_URL}/api/buckets`
+  const [mode, setMode] = useState("light")
 
   useEffect(() => {
     const fetchBuckets = async () => {
@@ -26,6 +26,11 @@ function App() {
     }
     fetchBuckets()
   }, [])
+
+  useEffect(() => {
+    document.body.className = mode;
+  }, [mode])
+
 
   const onCreate = async ({ text, category, dueDate }) => {
     console.log("📦 새로 생성 요청:", { text, category, dueDate })
@@ -102,8 +107,13 @@ function App() {
   }
 
   return (
-    <div className='App'>
+    <div className={`App ${mode}`}>
       <Header />
+      <div style={{ textAlign: "right", padding: "10px" }}>
+        <button onClick={() => setMode(mode === "light" ? "dark" : "light")}>
+          {mode === "light" ? "🌙 다크모드" : "🌞 라이트모드"}
+        </button>
+      </div>
       <TodoEditor onCreate={onCreate} />
       <TodoList
         buckets={buckets}
