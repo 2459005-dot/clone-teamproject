@@ -50,12 +50,16 @@ router.put('/:id', async (req, res) => {
         const { id } = req.params
         if (!ensureObjectId(id, res)) return
 
+        const { text, category, dueDate, isCompleted } = req.body;
+        
         const updateData = {
-            text: req.body.text,
-            category: req.body.category,
-            isCompleted: req.body.isCompleted, // 혹시 완료 여부도 수정한다면
-            dueDate: req.body.dueDate // 여기에 dueDate를 콕 집어 넣어줍니다.
-        }
+            text,
+            category,
+            ...(dueDate !== undefined && { dueDate }),
+            ...(isCompleted !== undefined && { isCompleted })
+        };
+
+        console.log("💾 [DB 저장 시도 데이터]:", updateData);
 
         const updated = await Bucket.findByIdAndUpdate(id, updateData, {
             new: true,
@@ -63,11 +67,15 @@ router.put('/:id', async (req, res) => {
         })
 
         if (!updated) {
+            console.log("❌ [업데이트 실패] 해당 ID 없음");
             return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
         }
+        
+        console.log("✅ [업데이트 성공] 결과:", updated);
         res.status(200).json({ message: "수정 성공", updated })
+
     } catch (error) {
-        console.error("DB 수정 에러:", error) // 에러 로그 추가
+        console.error("🔥 [서버 에러]:", error)
         res.status(400).json({ error: "수정 실패" })
     }
 })
