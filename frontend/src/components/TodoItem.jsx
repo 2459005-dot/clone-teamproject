@@ -12,7 +12,6 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
   const [selectedCategory, setSelectedCategory] = useState(bucket?.category || "기타")
   const [dueDate, setDueDate] = useState(bucket?.dueDate ? bucket.dueDate.split("T")[0] : "")
 
-  // ✅ bucket이 변경될 때 로컬 state도 동기화
   useEffect(() => {
     setText(bucket?.text || "")
     setSelectedCategory(bucket?.category || "기타")

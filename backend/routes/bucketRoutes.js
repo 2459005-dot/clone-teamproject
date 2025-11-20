@@ -48,14 +48,27 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params
-        
-        const updateData = req.body 
-        
+        if (!ensureObjectId(id, res)) return
+
+        const updateData = {
+            text: req.body.text,
+            category: req.body.category,
+            isCompleted: req.body.isCompleted, // 혹시 완료 여부도 수정한다면
+            dueDate: req.body.dueDate // 여기에 dueDate를 콕 집어 넣어줍니다.
+        }
+
         const updated = await Bucket.findByIdAndUpdate(id, updateData, {
             new: true,
             runValidators: true
         })
+
+        if (!updated) {
+            return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
+        }
+        res.status(200).json({ message: "수정 성공", updated })
     } catch (error) {
+        console.error("DB 수정 에러:", error) // 에러 로그 추가
+        res.status(400).json({ error: "수정 실패" })
     }
 })
 
