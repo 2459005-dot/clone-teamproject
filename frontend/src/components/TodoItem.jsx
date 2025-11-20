@@ -16,6 +16,7 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
   useEffect(() => {
     setText(bucket?.text || "")
     setSelectedCategory(bucket?.category || "기타")
+    setDueDate(bucket?.dueDate ? bucket.dueDate.split("T")[0] : "")
   }, [bucket])
 
   const startEdit = () => {
@@ -45,11 +46,17 @@ const TodoItem = ({ bucket, onUpdateChecked, onUpdateBucket, onDelete }) => {
 
   const getDDay = (targetDate) => {
     if (!targetDate) return null
+
     const today = new Date()
     const dday = new Date(targetDate)
+
+    today.setHours(0, 0, 0, 0)
+    dday.setHours(0, 0, 0, 0)
+
     const diff = Math.ceil((dday - today) / (1000 * 60 * 60 * 24))
+
+    if (diff === 0) return "D-Day"
     if (diff > 0) return `D-${diff}`
-    if (diff === 0) return "D-Day!"
     return `D+${Math.abs(diff)}`
   }
 

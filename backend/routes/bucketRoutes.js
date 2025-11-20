@@ -48,20 +48,14 @@ router.get('/:id', async (req, res) => {
 router.put('/:id', async (req, res) => {
     try {
         const { id } = req.params
-        if (!ensureObjectId(id, res)) return
-
-        const updateData = req.body
+        
+        const updateData = req.body 
+        
         const updated = await Bucket.findByIdAndUpdate(id, updateData, {
             new: true,
             runValidators: true
         })
-
-        if (!updated) {
-            return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
-        }
-        res.status(200).json({ message: "수정 성공", updated })
     } catch (error) {
-        res.status(400).json({ error: "수정 실패" })
     }
 })
 
@@ -170,19 +164,27 @@ router.patch('/:id/check', async (req, res) => {
 // })
 
 router.patch('/:id', async (req, res) => {
-    const { text, category } = req.body
+    const { text, category, dueDate } = req.body 
     const updateData = {}
 
     if (typeof text === 'string') updateData.text = text.trim()
     if (category) updateData.category = category
+    
+    if (dueDate !== undefined) {
+        updateData.dueDate = dueDate; 
+    }
 
-    const updated = await Bucket.findByIdAndUpdate(req.params.id, updateData, {
-        new: true,
-        runValidators: true
-    })
+    try {
+        const updated = await Bucket.findByIdAndUpdate(req.params.id, updateData, {
+            new: true,
+            runValidators: true
+        })
 
-    if (!updated) return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
-    res.status(200).json({ bucket: updated })
+        if (!updated) return res.status(404).json({ message: '해당 아이디의 버킷 없음' })
+        res.status(200).json({ bucket: updated })
+    } catch (error) {
+        res.status(400).json({ error: "수정 실패" })
+    }
 })
 
 module.exports = router

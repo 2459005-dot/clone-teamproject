@@ -18,6 +18,7 @@ const BucketEditor = ({ onCreate }) => {
     })
     setText("")
     setCategory(categories[0])
+    setDueDate("") 
   }
 
   return (
